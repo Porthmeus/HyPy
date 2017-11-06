@@ -1,0 +1,37 @@
+% Initiation
+
+>a.1
+    startcells = 11320
+    proliferation = 0.8
+    tau = 72
+    max = 20871
+    budSize = 0.54
+    budDevTime = 86.4
+    birth = 0
+    apoptosis = 0.17
+    tau2 = 72
+    unit = h
+    stepSize = 1
+
+>a.2
+    startcells = 11320
+    proliferation = 0.8
+    tau = 72
+    max = 20871
+    budSize = 0.54
+    
+% simulation
+
+byTime = False
+byNumber = True
+number = 200
+time = 200
+
+% analysis
+
+cellnumber = cellnumber.csv
+population = population.csv
+    generation = b
+deltaTs = deltaTs.csv
+budInitiation = budInitiation.csv
+budDrops = budDrops.csv
