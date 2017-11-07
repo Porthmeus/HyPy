@@ -1,0 +1,109 @@
+Use a config file to define the details of the simulation you want to run. For a sample config file have look in /test/config.txt of this package. There are three sections to define:
+
+    * initialization
+    * simulation
+    * analysis
+
+Each of the section starts with a "%" and the section name. In the section
+their parameters are specified using a simple keywords = value form.
+
+Initialization
+==============
+
+This section defines, how many polyps should start the experiment, when they
+are added to the simulation and what parameters should be simulated. Each polyp
+is indicated by ">" followed by a random name which should be assigned to the
+polyp. The name will not be preserved, rather an ID will be generated in the
+form of a.1, a.2 ... a.N in the order of appearance of the config file. Each
+polyp starts a subsection indicated by indentation, where the specific features
+of the polyp is defined.
+
+
+    startcells = [int]          defines how many cells a polyp should have in
+                                the beginning of the simulation (default =
+                                1000)
+    proliferation = [float]     defines the proliferation rate of the cells in
+                                the given time frame of tau (usually a value
+                                between 0 an 1) (default = 0.8)
+    tau = [float]               defines the time frame in which the fraction of
+                                proliferating cells devide (default = 96)
+    apoptosis = [float]         the fraction of cells which will go into the
+                                apoptosis within the time frame of tau2
+                                (between 0 and 1) (default = 0.17)
+    tau2 = [float]              the time frame in which the fraction of
+                                apoptotic cells will die (default = 72)
+    max = [int]                 defines when the critical size is reached and
+                                axis is broken to generate a new bud (default =
+                                20000)
+    budSize = [float]           defines the number of cells a bud has to obtain
+                                before it is dropped from the mother polyp.
+                                This is given as a fraction of max cells of the
+                                mother polyp and must be between 0 and 1
+                                (default = 0.45)
+    budDevTime = [float]        the time a bud needs for development. Usually
+                                something around 3.5 days at 18°C. Since this
+                                is only a hint how long the bud develops and
+                                what factors really determine bud development,
+                                the implentation is somewhat unprecise. The
+                                simulation will give shorter times for dT2
+                                (difference scales with size of dT2), if
+                                analyzed, because it does not consider the
+                                proliferation within the bud. (default = 72)
+    birth = [int]               gives the time step of the simulation when the
+                                polyp observed within the simulation (usually 0
+                                for the first polyp initialized). In general it
+                                simply gives the timestep of the simulation
+                                when a polyp is generated. (default = 0)
+    unit = [str]                the unit of the timestep (default = h)
+    stepsize = [int]            how large is a step in the simulation (default
+                                = 1)
+
+
+Simulation
+==========
+
+This section defines how the simulation should be run. There are three modes:
+    * run for time
+    * run for polyp number
+    * run for time and polyp number
+The first runs the simulation a certain number of simulation steps. The second
+runs the simulation until the given number of polyps is reached. The third
+combines both and runs as long as one of both conditions is met.
+
+    byTime = [bool]             simulation by time? (default = False)
+    byNumber = [bool]           simulation by polyp number? (default = True)
+    time = [int]                how many timesteps should be simulated?
+                                (default = None)
+    number = [int]              how many polyps should be simulated least?
+                                (default = 20)
+
+Analysis
+========
+
+This section defines what data should be outputed. If nothing is defined here,
+nothing will be written to disk and the simulation did only heat your room a
+little. Following things can be analysed, the value given for each argument is
+the path to the file which should be written.
+
+    cellnumber = [str]          Returns a data frame for each timepoint (rows) in the
+                                simulation with the current cell number of all
+                                polyps (columns).
+    population = [str]          This calculates the number of polyps for a
+                                given time step (rows) and family (columns). It
+                                will split the simulation in subfamilies by the
+                                generation. The option requires two additional
+                                arguments: the generation to split the
+                                simulation at and a cutoff for polyp number per
+                                family to discard families with fewer members
+                                given in the cutoff argument.
+        generation = [str]      A letter indicating the generation to split the
+                                simulation in subfamilies. (default = b)
+        cutoff = [int]          A number for the cutoff of family members to
+                                discard families with only few members. (default =5)
+    deltaTs = [str]             Calculates the deltaTs of all polyps over the
+                                whole simualation.
+    budInitiation = [str]       Returns a data frame for all polyps (columns)
+                                and the timepoints (rows) of the initiation of
+                                a bud
+    budDrops = [str]            Returns a data frame for all polyps (columns)
+                                and when they dropped a bud
