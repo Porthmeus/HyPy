@@ -288,7 +288,7 @@ class Bud(Polyp):
         unit = "h",
         stepSize = 1,
         ID = "a.1"):
-
+        
         Polyp.__init__(self,
             startcells = startcells,
             proliferation = proliferation,

@@ -5,8 +5,10 @@ from src.Polyp2 import Polyp
 from src.simulation import *
 from src.analyseSimulation import *
 from src.dic2csv import dic2csv
+import src.readDocumentation
 import warnings
 import argparse
+
 
 def readKeywordValue(line):
     '''
@@ -68,7 +70,7 @@ def parseInitiation(config):
                         # create a dictionary to store the values
                         plp = {}    
                         name = l.replace(" ","").replace(">","")
-                        plp["ID"] = name
+                        plp["ID"] = "a." + str(nPolyp + 1)
                         nPolyp = nPolyp +1
                     
                     # get the whole polyp information which is given
@@ -274,7 +276,12 @@ def parseAnalysis(config, polyps):
 
 if __name__ == "__main__":
     
-    aprs = argparse.ArgumentParser(version = "1.0")
+
+    configFileDoc = src.readDocumentation.readConfigDoc()
+
+    aprs = argparse.ArgumentParser(version = "1.0",
+        formatter_class = argparse.RawDescriptionHelpFormatter,
+        description = configFileDoc)
     aprs.add_argument("config", help = "The path to the config file")
 
     args = aprs.parse_args()
