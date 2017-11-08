@@ -49,7 +49,7 @@ def parseInitiation(config):
             l = l.strip("\n")
             
             # ignore comments
-            if not l.replace(" ","").startswith("#") or not line.strip() == "":
+            if not l.replace(" ","").startswith("#") or not l.strip() == "":
                 
                 # get the initiation part
                 if l.startswith("%"):
