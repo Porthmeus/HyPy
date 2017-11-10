@@ -130,8 +130,8 @@ Current time : {time}
         Calculates the amount of cells to submit into a bud at the current state of the simulation
         '''
         
-        budPortion = (self.budSize*0.4/self.budDevTime)* self.stepSize
-
+   #     budPortion = (self.budSize*0.4/self.budDevTime)* self.stepSize #this is the original implementation, though I forgot where the factor of 0.4 comes from
+        budPortion = (self.budSize*0.8/self.budDevTime)* self.stepSize # the factor here is arbitrary, to adjust the proliferation in the bud, which is otherwise not accounted for
         return(budPortion)
 
     def simStep(self):
@@ -140,6 +140,9 @@ Current time : {time}
         droppedBuds = []
         self.current = self.current + self.stepSize
         # calculate the amount of apoptotic and proliferating cells 
+        #if len(self.buds) > 0:
+         #   prol = (((self.proliferation*0.64)/self.tau) + 1)/self.stepSize
+        #else:
         prol = ((self.proliferation/self.tau) + 1)/self.stepSize
         apop = (self.apoptosis/self.tau2)/self.stepSize
 
@@ -253,7 +256,7 @@ Current time : {time}
         '''
         if len(self.initializedBuds) > 0:
         # calculate dT1
-            deltas = {"dT1" : self.initializedBuds.values()[0] - self.birth, "dT2" : {}, "dT3" : []}
+            deltas = {"dT1" : min(self.initializedBuds.values()) - self.birth, "dT2" : {}, "dT3" : []}
         else:
             return ({"dT1" : float("nan"), "dT2" : {}, "dT3" : []})
         # calculate the dT2s
@@ -317,7 +320,7 @@ class Bud(Polyp):
         apop = (self.apoptosis/self.tau2)/self.stepSize
 
         # calculate the current size and add the current life time of the polyp
-        self.size = round(self.size * prol) - round(self.size * apop) + self.calcBudPortion()
+        self.size = round(self.size * prol) - round(self.size * apop) #+ self.calcBudPortion()
 
         return(self.calcBudPortion())
 
@@ -342,5 +345,6 @@ class Bud(Polyp):
         ID = self.ID)
 
         return(p)
+
 
 
